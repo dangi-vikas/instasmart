@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RentalAgreementRepository extends JpaRepository<RentalAgreement, Integer> {
-
+    public RentalAgreement findByDiscount_Id(Integer discountId);
 }
