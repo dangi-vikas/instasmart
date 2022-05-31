@@ -1,14 +1,12 @@
 package com.customer.service;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.ws.Response;
 
 import com.customer.domain.Address;
 import com.customer.domain.OrderDetail;
 import com.customer.domain.RentalAgreement;
 import com.customer.repository.AddressRepository;
+import com.customer.repository.DiscountRepository;
 import com.customer.repository.OrderDetailRepository;
 import com.customer.repository.RentalAgreementRepository;
 
@@ -26,6 +24,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Autowired
     RentalAgreementRepository rentalAgreementRepository;
+
+    @Autowired
+    DiscountRepository discountRepository;
 
     @Override
     public OrderDetail obtainOrderDetailById(Integer id) {
@@ -45,12 +46,17 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     @Override
     public OrderDetail saveAddressAndCalculatePrice(Integer orderDetailId, Integer addressId, Integer discountId) {
         Address address = addressRepository.findById(addressId).get();
-        orderDetailRepository.findById(orderDetailId).get().setAddress(address);
-        orderDetailRepository.save();
+        OrderDetail order = orderDetailRepository.findById(orderDetailId).get();
+        RentalAgreement rent = rentalAgreementRepository.findByDiscount_Id(discountId);
+        // DiscountRepository discount;
 
-        rentalAgreementRepository.save();
+        order.setAddress(address);
+        orderDetailRepository.save(order);
 
-        return new OrderDetail();
+        rent.setOrder(order);
+        rentalAgreementRepository.save(rent);
+
+        return order;
     }
 
 }

@@ -14,15 +14,17 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public User userLogin(User user) {
-        User response = userRepository.findByUsername(user.getUsername())
-                .orElseThrow(
-                        () -> new UsernameNotFoundException("User Not Found with username: " + user.getUsername()));
+        User response = userRepository.findByUsername(user.getUsername()).get();
+        // .orElseThrow(NotFoundException("User Not Found with username: " +
+        // user.getUsername()));
 
         if (user.getPassword().equals(response.getPassword()))
             return response;
-        else {
-            throw new Exception("Username or Password is incorrect");
-        }
+        // else {
+        // throw new Exception("Username or Password is incorrect");
+        // }
+
+        return response;
     }
 
 }

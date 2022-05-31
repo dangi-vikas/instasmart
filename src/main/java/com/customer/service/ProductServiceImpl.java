@@ -3,9 +3,6 @@ package com.customer.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-
-import javax.validation.constraints.Null;
 
 import com.customer.domain.OrderDetail;
 import com.customer.domain.Product;
@@ -45,14 +42,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public OrderDetail addProductToMyCart(String productList) {
-        ArrayList<String> idList = new ArrayList<>(Arrays.asList(productList.split(","));
+        ArrayList<String> idList = new ArrayList<>(Arrays.asList(productList.split(",")));
+        ArrayList<Product> prodList = new ArrayList<>();
+        OrderDetail order = new OrderDetail();
 
-        for(String id : idList) {
+        for (String id : idList) {
             Product product = productRepository.findById(Integer.parseInt(id)).get();
-            orderDetailRepository.save(product);
+            prodList.add(product);
         }
 
-        return new OrderDetail();
+        order.setProductList(prodList);
+        orderDetailRepository.save(order);
+
+        return order;
     }
 
 }
