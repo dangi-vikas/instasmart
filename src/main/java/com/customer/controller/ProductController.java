@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class ProductController {
-	
+
 	@Autowired
 	ProductService productService;
 
@@ -20,13 +20,13 @@ public class ProductController {
 	public List<Product> obtainProductList() {
 		return productService.obtainProductList();
 	}
-	
-	@GetMapping("/obtainProductById")
+
+	@GetMapping("/obtainProductById/{id}")
 	public Product obtainProductById(@PathVariable("id") Integer id) throws NotFoundException {
 		return productService.obtainProductById(id);
 	}
 
-	@GetMapping("/addProductToMyCart/productList")
+	@GetMapping("/addProductToMyCart/{productList}")
 	public OrderDetail addProductToMyCart(@PathVariable("productList") String productList) {
 		return productService.addProductToMyCart(productList);
 	}
